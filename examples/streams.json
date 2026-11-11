@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "streams": [
+        {
+            "id": "5f0c8d52-7a1e-4b7a-9d55-1c2f6a3b9e01",
+            "title": "BGMI Squad Scrims",
+            "kind": "stream",
+            "startedUtc": "2026-11-09T14:30:02.118Z",
+            "startedLocal": "2026-11-09 20:00:02",
+            "endedUtc": "2026-11-09T16:12:40.553Z",
+            "interrupted": false
+        }
+    ]
+}

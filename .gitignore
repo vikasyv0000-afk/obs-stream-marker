@@ -1,0 +1,7 @@
+build_x64/
+build_test/
+build/
+.deps/
+dist/
+*.user
+.vs/

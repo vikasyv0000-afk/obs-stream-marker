@@ -1,0 +1,9 @@
+{
+    "version": 1,
+    "categories": [
+        { "id": "clutch-kill",   "name": "Clutch / Kill",  "color": "#B9F0C0", "icon": "🎯" },
+        { "id": "funny-moment",  "name": "Funny Moment",   "color": "#FFF1A8", "icon": "😂" },
+        { "id": "winner-winner", "name": "Winner Winner",  "color": "#B8DDFB", "icon": "🍗" },
+        { "id": "epic-moment",   "name": "Epic Moment",    "color": "#FFC4DC", "icon": "⭐" }
+    ]
+}

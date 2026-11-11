@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "markers": [
+        {
+            "id": "a4e1b0aa-0c53-4c7e-8c0e-2b7d1f6a0001",
+            "sessionId": "5f0c8d52-7a1e-4b7a-9d55-1c2f6a3b9e01",
+            "categoryId": "clutch-kill",
+            "categoryName": "Clutch / Kill",
+            "elapsedSeconds": 754,
+            "elapsedFormatted": "00:12:34",
+            "localDate": "2026-11-09",
+            "localDateTime": "2026-11-09 20:12:36",
+            "utcTimestamp": "2026-11-09T14:42:36.201Z",
+            "notes": "1v3 on the bridge"
+        },
+        {
+            "id": "a4e1b0aa-0c53-4c7e-8c0e-2b7d1f6a0002",
+            "sessionId": "5f0c8d52-7a1e-4b7a-9d55-1c2f6a3b9e01",
+            "categoryId": "funny-moment",
+            "categoryName": "Funny Moment",
+            "elapsedSeconds": 2711,
+            "elapsedFormatted": "00:45:11",
+            "localDate": "2026-11-09",
+            "localDateTime": "2026-11-09 20:45:13",
+            "utcTimestamp": "2026-11-09T15:15:13.874Z",
+            "notes": ""
+        },
+        {
+            "id": "a4e1b0aa-0c53-4c7e-8c0e-2b7d1f6a0003",
+            "sessionId": "5f0c8d52-7a1e-4b7a-9d55-1c2f6a3b9e01",
+            "categoryId": "winner-winner",
+            "categoryName": "Winner Winner",
+            "elapsedSeconds": 6038,
+            "elapsedFormatted": "01:40:38",
+            "localDate": "2026-11-09",
+            "localDateTime": "2026-11-09 21:40:40",
+            "utcTimestamp": "2026-11-09T16:10:40.012Z",
+            "notes": "Chicken dinner"
+        }
+    ]
+}
