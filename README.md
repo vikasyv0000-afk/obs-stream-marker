@@ -106,6 +106,10 @@ The plugin is built against the OBS 31.1.x SDK; it links the Qt6 libraries that 
 
 ## Installing
 
+**Easiest:** download `OBS-Stream-Marker-Setup-1.0.0.exe` from the [Releases](../../releases) page, close OBS, run it, then start OBS and open **Docks > Stream Marker**. (Windows SmartScreen may warn because the installer is not code-signed: *More info > Run anyway*.)
+
+Manual / from source:
+
 Close OBS, then either run `.\scripts\install.ps1`, or copy the package folder by hand:
 
 ```
@@ -117,7 +121,7 @@ dist\obs-stream-marker\            ->   C:\ProgramData\obs-studio\plugins\obs-st
 Start OBS and open **Docks > Stream Marker**. Check *Help > Log Files > View Current Log* for a line
 starting with `[obs-stream-marker] loaded`.
 
-To uninstall, delete that folder. Your data stays in `plugin_config` until you remove it.
+To uninstall, use *Apps > Installed apps*, or delete that folder. Your data stays in `plugin_config` until you remove it.
 
 ## Source layout
 
