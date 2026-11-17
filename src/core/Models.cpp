@@ -114,6 +114,8 @@ QJsonObject Settings::toJson() const
 			   {"offsetSeconds", offsetSeconds},
 			   {"promptForNote", promptForNote},
 			   {"recentCount", recentCount},
+			   {"trackRecording", trackRecording},
+			   {"trackVirtualCam", trackVirtualCam},
 			   {"soundOnMarker", soundOnMarker},
 			   {"toastOnMarker", toastOnMarker}};
 }
@@ -125,6 +127,8 @@ Settings Settings::fromJson(const QJsonObject &o)
 	s.offsetSeconds = std::clamp(o.value("offsetSeconds").toInt(0), -3600, 3600);
 	s.promptForNote = o.value("promptForNote").toBool(false);
 	s.recentCount = std::clamp(o.value("recentCount").toInt(50), 5, 500);
+	s.trackRecording = o.value("trackRecording").toBool(true);
+	s.trackVirtualCam = o.value("trackVirtualCam").toBool(true);
 	s.soundOnMarker = o.value("soundOnMarker").toBool(true);
 	s.toastOnMarker = o.value("toastOnMarker").toBool(false);
 	return s;

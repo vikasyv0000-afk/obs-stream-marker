@@ -71,6 +71,7 @@ private:
 	std::function<QString(const QString &)> hotkeyLabel_;
 	QLabel *messageLabel_ = nullptr;
 	QPushButton *undoBtn_ = nullptr;
+	QPushButton *sessionBtn_ = nullptr;
 	QString lastText_;
 	QListWidget *history_ = nullptr;
 	QTimer *tick_ = nullptr;

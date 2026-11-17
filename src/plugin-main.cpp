@@ -78,8 +78,12 @@ void onFrontendEvent(enum obs_frontend_event event, void *)
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
 		addDock();
 		// Plugin loaded while a stream was already running: best effort, start the clock now.
-		if (obs_frontend_streaming_active() && !sessions->streaming())
-			sessions->onStreamingStarted();
+		if (obs_frontend_streaming_active())
+			sessions->onSourceStarted("stream");
+		else if (obs_frontend_recording_active() && sessions->settings().trackRecording)
+			sessions->onSourceStarted("recording");
+		else if (obs_frontend_virtualcam_active() && sessions->settings().trackVirtualCam)
+			sessions->onSourceStarted("virtualcam");
 		break;
 
 	case OBS_FRONTEND_EVENT_STREAMING_STARTED: {
@@ -91,6 +95,30 @@ void onFrontendEvent(enum obs_frontend_event event, void *)
 	}
 	case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
 		QMetaObject::invokeMethod(sessions, [sessions] { sessions->onStreamingStopped(); });
+		break;
+
+	case OBS_FRONTEND_EVENT_RECORDING_STARTED: {
+		const auto at = sm::StreamTimer::Clock::now();
+		QMetaObject::invokeMethod(sessions, [sessions, at] {
+			if (sessions->settings().trackRecording)
+				sessions->onSourceStarted("recording", at);
+		});
+		break;
+	}
+	case OBS_FRONTEND_EVENT_RECORDING_STOPPED:
+		QMetaObject::invokeMethod(sessions, [sessions] { sessions->onSourceStopped("recording"); });
+		break;
+
+	case OBS_FRONTEND_EVENT_VIRTUALCAM_STARTED: {
+		const auto at = sm::StreamTimer::Clock::now();
+		QMetaObject::invokeMethod(sessions, [sessions, at] {
+			if (sessions->settings().trackVirtualCam)
+				sessions->onSourceStarted("virtualcam", at);
+		});
+		break;
+	}
+	case OBS_FRONTEND_EVENT_VIRTUALCAM_STOPPED:
+		QMetaObject::invokeMethod(sessions, [sessions] { sessions->onSourceStopped("virtualcam"); });
 		break;
 
 	case OBS_FRONTEND_EVENT_EXIT:

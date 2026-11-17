@@ -82,6 +82,19 @@ MarkerDock::MarkerDock(SessionManager *sessions, CategoryManager *cats, QWidget 
 	header->addWidget(timerLabel_);
 	header->addStretch(1);
 
+	// Manual start/stop for streaming setups OBS cannot detect (browser extensions, other apps).
+	sessionBtn_ = new QPushButton(this);
+	sessionBtn_->setStyleSheet("QPushButton{padding:4px 10px;border-radius:8px;font-size:11px;}");
+	connect(sessionBtn_, &QPushButton::clicked, this, [this] {
+		if (!sessions_)
+			return;
+		if (sessions_->sessionOpen())
+			sessions_->stopManual();
+		else
+			sessions_->startManual();
+	});
+	header->addWidget(sessionBtn_);
+
 	auto *menuBtn = new QToolButton(this);
 	menuBtn->setText(QString::fromUtf8("\u22EF"));
 	menuBtn->setToolTip(tr("Menu"));
@@ -359,12 +372,30 @@ void MarkerDock::refreshStatus()
 		return;
 	const bool live = sessions_->streaming();
 	const bool open = sessions_->sessionOpen();
+	const QString kind = sessions_->activeKind();
+
+	// Start/Stop button: shown when idle, or when the open session is a manual one.
+	if (!open) {
+		sessionBtn_->setText(QString::fromUtf8("\u25B6 ") + tr("Start"));
+		sessionBtn_->setToolTip(tr("Start a marker session now (use when OBS can't detect your stream)"));
+		sessionBtn_->setVisible(true);
+	} else if (kind == QLatin1String("manual")) {
+		sessionBtn_->setText(QString::fromUtf8("\u25A0 ") + tr("Stop"));
+		sessionBtn_->setToolTip(tr("End this marker session"));
+		sessionBtn_->setVisible(true);
+	} else {
+		sessionBtn_->setVisible(false); // stream/recording/virtual camera sessions follow OBS
+	}
 
 	QString pill;
 	if (live)
 		pill = QStringLiteral("<span style='color:%1'>&#9679;</span>&nbsp;<b>%2</b>").arg(theme::kLive, tr("LIVE"));
-	else if (open)
-		pill = QStringLiteral("<span style='color:%1'>&#9679;</span>&nbsp;<b>%2</b>").arg(theme::kWarning, tr("OFFLINE"));
+	else if (open) {
+		const QString label = kind == QLatin1String("recording") ? tr("REC")
+				      : kind == QLatin1String("virtualcam") ? tr("CAM")
+									     : tr("SESSION");
+		pill = QStringLiteral("<span style='color:%1'>&#9679;</span>&nbsp;<b>%2</b>").arg(theme::kWarning, label);
+	}
 	else
 		pill = QStringLiteral("<span style='color:%1'>&#9679;</span>&nbsp;<b>%2</b>").arg(theme::kMuted, tr("IDLE"));
 	statusLabel_->setTextFormat(Qt::RichText);

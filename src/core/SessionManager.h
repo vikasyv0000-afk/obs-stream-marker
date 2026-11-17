@@ -28,11 +28,19 @@ public:
 	explicit SessionManager(StorageManager &storage, QObject *parent = nullptr);
 
 	// --- lifecycle (call from the UI thread) ---
-	void onStreamingStarted(StreamTimer::Clock::time_point at = StreamTimer::Clock::now());
-	void onStreamingStopped();
+	// A marker session can be driven by several sources. Priority: stream > recording = virtualcam > manual.
+	// A higher-priority source replaces a running lower-priority session; stopping only closes a session
+	// that was opened by the same source.
+	void onSourceStarted(const QString &kind, StreamTimer::Clock::time_point at = StreamTimer::Clock::now());
+	void onSourceStopped(const QString &kind);
+	void onStreamingStarted(StreamTimer::Clock::time_point at = StreamTimer::Clock::now()) { onSourceStarted("stream", at); }
+	void onStreamingStopped() { onSourceStopped("stream"); }
+	void startManual() { onSourceStarted("manual"); }
+	void stopManual() { onSourceStopped("manual"); }
+	QString activeKind() const { return activeKind_; }
 	void finalize(); // OBS exit: close any open session and flush everything
 
-	bool streaming() const { return streamSessionId_.size() > 0; }
+	bool streaming() const { return activeKind_ == QLatin1String("stream"); }
 	bool sessionOpen() const { return timer_.running(); }
 	QString activeSessionId() const { return openSessionId_; }
 	qint64 elapsedSeconds() const { return timer_.elapsedSeconds(); }
@@ -69,6 +77,7 @@ signals:
 
 private:
 	void openSession(const QString &kind, StreamTimer::Clock::time_point at);
+	static int priority(const QString &kind);
 	void closeSession();
 	void saveSessions();
 	void saveMarkers();
@@ -80,7 +89,7 @@ private:
 	Settings settings_;
 	StreamTimer timer_;
 	QString openSessionId_;   // session currently receiving markers (stream or manual)
-	QString streamSessionId_; // non-empty only while a real stream is live
+	QString activeKind_;      // kind of the open session: stream / recording / virtualcam / manual
 	QString pendingTitle_;    // title typed before the stream starts
 };
 

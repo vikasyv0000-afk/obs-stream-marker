@@ -1,7 +1,7 @@
 ; Inno Setup script - builds OBS-Stream-Marker-Setup-<version>.exe
 ; Build:  ISCC.exe installer\obs-stream-marker.iss   (after scripts\build.ps1 created .\dist)
 #define AppName "OBS Stream Marker"
-#define AppVersion "1.0.0"
+#define AppVersion "1.1.0"
 #define Plugin "obs-stream-marker"
 
 [Setup]

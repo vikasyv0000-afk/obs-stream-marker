@@ -52,6 +52,8 @@ struct Settings {
 	int offsetSeconds = 0;            // added to elapsed time (e.g. -10 for stream latency lead-in)
 	bool promptForNote = false;       // ask for a note after each click
 	int recentCount = 50;             // rows shown in the dock history
+	bool trackRecording = true;       // OBS "Start Recording" also opens a marker session
+	bool trackVirtualCam = true;      // OBS "Start Virtual Camera" also opens a marker session
 	bool soundOnMarker = true;        // short tone when a marker is recorded (pitch differs per category)
 	bool toastOnMarker = false;       // small always-on-top, non-focus-stealing confirmation popup
 

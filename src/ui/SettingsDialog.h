@@ -21,6 +21,8 @@ private:
 	QCheckBox *offline_;
 	QCheckBox *note_;
 	QCheckBox *sound_;
+	QCheckBox *rec_;
+	QCheckBox *cam_;
 	QCheckBox *toast_;
 	QSpinBox *offset_;
 	QSpinBox *recent_;

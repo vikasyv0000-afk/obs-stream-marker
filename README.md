@@ -33,6 +33,7 @@ Other features:
 | Previous streams | **Streams** button: browse, rename, export, delete sessions |
 | Stream title | Field in the dock; it is used in the CSV |
 | Timestamp offset | Settings. Use e.g. `-10 s` to mark a little *before* the click |
+| Start/Stop button | ▶ Start in the dock begins a session manually (for streams OBS cannot detect, e.g. browser extensions); also auto-starts on OBS recording or Virtual Camera |
 | Markers while offline | Settings (off by default). Creates a separate "Offline markers" session |
 
 The dock is a normal OBS dock: dock it anywhere, float it, resize it. On very narrow widths the grid
@@ -106,7 +107,7 @@ The plugin is built against the OBS 31.1.x SDK; it links the Qt6 libraries that 
 
 ## Installing
 
-**Easiest:** download `OBS-Stream-Marker-Setup-1.0.0.exe` from the [Releases](../../releases) page, close OBS, run it, then start OBS and open **Docks > Stream Marker**. (Windows SmartScreen may warn because the installer is not code-signed: *More info > Run anyway*.)
+**Easiest:** download `OBS-Stream-Marker-Setup-1.1.0.exe` from the [Releases](../../releases) page, close OBS, run it, then start OBS and open **Docks > Stream Marker**. (Windows SmartScreen may warn because the installer is not code-signed: *More info > Run anyway*.)
 
 Manual / from source:
 

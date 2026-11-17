@@ -30,6 +30,16 @@ SettingsDialog::SettingsDialog(SessionManager &sessions, CategoryManager &cats, 
 				"When on, clicking while offline starts a separate \"Offline markers\" session."));
 	form->addRow(offline_);
 
+	rec_ = new QCheckBox(tr("Also start a session when OBS recording starts"), this);
+	rec_->setChecked(s.trackRecording);
+	form->addRow(rec_);
+
+	cam_ = new QCheckBox(tr("Also start a session when the Virtual Camera starts"), this);
+	cam_->setChecked(s.trackVirtualCam);
+	cam_->setToolTip(tr("For streaming through a browser or another app that uses the OBS Virtual Camera.\n"
+			    "You can always use the Start button in the dock instead."));
+	form->addRow(cam_);
+
 	offset_ = new QSpinBox(this);
 	offset_->setRange(-3600, 3600);
 	offset_->setSuffix(tr(" s"));
@@ -85,6 +95,8 @@ SettingsDialog::SettingsDialog(SessionManager &sessions, CategoryManager &cats, 
 		n.offsetSeconds = offset_->value();
 		n.promptForNote = note_->isChecked();
 		n.recentCount = recent_->value();
+		n.trackRecording = rec_->isChecked();
+		n.trackVirtualCam = cam_->isChecked();
 		n.soundOnMarker = sound_->isChecked();
 		n.toastOnMarker = toast_->isChecked();
 		sessions_.setSettings(n);

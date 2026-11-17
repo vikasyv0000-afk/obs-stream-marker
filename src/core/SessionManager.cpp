@@ -54,12 +54,18 @@ void SessionManager::openSession(const QString &kind, StreamTimer::Clock::time_p
 	s.id = newId();
 	s.kind = kind;
 	s.title = pendingTitle_.trimmed().isEmpty() ? defaultTitle() : pendingTitle_.trimmed();
+	const QString stamp = now.toString("yyyy-MM-dd HH:mm");
 	if (kind == "manual")
-		s.title = QStringLiteral("Offline markers ") + now.toString("yyyy-MM-dd HH:mm");
+		s.title = (pendingTitle_.trimmed().isEmpty() ? QStringLiteral("Session ") : pendingTitle_.trimmed() + QStringLiteral(" ")) + stamp;
+	else if (kind == "recording")
+		s.title = pendingTitle_.trimmed().isEmpty() ? QStringLiteral("Recording ") + stamp : s.title;
+	else if (kind == "virtualcam")
+		s.title = pendingTitle_.trimmed().isEmpty() ? QStringLiteral("Virtual camera ") + stamp : s.title;
 	s.startedUtc = utcIso(now);
 	s.startedLocal = localStr(now);
 	sessions_.push_back(s);
 	openSessionId_ = s.id;
+	activeKind_ = kind;
 	timer_.start(at);
 	saveSessions(); // persist immediately so a crash still leaves a valid session record
 }
@@ -74,28 +80,39 @@ void SessionManager::closeSession()
 			break;
 		}
 	openSessionId_.clear();
+	activeKind_.clear();
 	timer_.stop();
 	saveSessions();
 }
 
-void SessionManager::onStreamingStarted(StreamTimer::Clock::time_point at)
+int SessionManager::priority(const QString &kind)
 {
-	if (!streamSessionId_.isEmpty())
-		return; // duplicate event: the session is already running
-	closeSession(); // an offline "manual" session ends when the real stream begins
-	openSession("stream", at);
-	streamSessionId_ = openSessionId_;
-	pendingTitle_.clear();
+	if (kind == "stream")
+		return 3;
+	if (kind == "recording" || kind == "virtualcam")
+		return 2;
+	return 1;
+}
+
+void SessionManager::onSourceStarted(const QString &kind, StreamTimer::Clock::time_point at)
+{
+	if (!activeKind_.isEmpty()) {
+		if (priority(activeKind_) >= priority(kind))
+			return; // already running (duplicate event, or something more important is active)
+		closeSession(); // e.g. the real stream begins while an offline/manual session is open
+	}
+	openSession(kind, at);
+	if (kind == "stream")
+		pendingTitle_.clear();
 	emit sessionStateChanged();
 	emit markersChanged();
 }
 
-void SessionManager::onStreamingStopped()
+void SessionManager::onSourceStopped(const QString &kind)
 {
-	if (streamSessionId_.isEmpty())
+	if (activeKind_ != kind)
 		return;
 	closeSession();
-	streamSessionId_.clear();
 	emit sessionStateChanged();
 }
 
@@ -103,7 +120,6 @@ void SessionManager::finalize()
 {
 	const bool wasOpen = !openSessionId_.isEmpty();
 	closeSession();
-	streamSessionId_.clear();
 	saveMarkers();
 	storage_.saveSettings(settings_);
 	if (wasOpen)
